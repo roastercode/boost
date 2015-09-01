@@ -3,8 +3,9 @@
 Booster made to works with GoXp
 We do not inject, we boost.
 
-inject -> boost
+inject   -> boost
 Injector -> Booster
+injector -> booster
 ...
 
 */
@@ -64,3 +65,32 @@ type TypeMapper interface {
 	// the Type has not been mapped
 	Get(reflect.Type) reflect.Value
 }
+
+type Injector struct {
+	values map[reflect.Type]reflect.Value
+	parent Booster
+}
+
+func InterfaceOf(value interfacr{}) reflect.Type {
+	t := reflect.TypeOf(value)
+	// InterfaceOf dereferences a pointer to an Interface type.
+	// It panics if value is not an pointer to an interface.
+
+	for t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+
+	if t.Kind() != reflect.Interface {
+		panic("Called boost.InterfaceOf with a value that is not a pointer to an interface.(*MyInterface)(nil)")
+	}
+
+	return t
+}
+
+// New returns a new Booster.
+func New() Booster {
+	return &booster{
+		values: make(map[reflect.Type]reflect.Value),
+	}
+}
+
