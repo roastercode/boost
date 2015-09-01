@@ -44,3 +44,23 @@ type Invoker interface {
 	// function
 	// Returns an error if the injection fails.
 }
+
+type TypeMapper interface {
+	// TypeMapper represents an interface for mapping interface{} values based
+	// on type.
+	Map(interface{}) TypeMapper
+	// Maps the interface{} value based on its immediate type form reflect.TypeOf
+	MapTo(interface{}, interface{}) TypeMapper
+	// Maps the interface{} value  base on the pointer of the Interface provided
+	// This is really only useful for mapping a value as an interface, as interfaces
+	// cannot at this time be referenced directly without a pointer.
+	Set(reflect.Type, reflect.Value) TypeMapper
+	// Provides a possibility to directly insert a mapping based on type and value.
+	// This makes it possible to directly map type arguments not possible to instantiate
+	// with reflect like unidirectional channels.
+	Set(reflect.Type, reflect.Value) TypeMapper
+	Get(reflect.Type) reflect.Value
+	// Returns the Value that is mapped to the current type. Returns a zeroed Value if
+	// the Type has not been mapped
+	Get(reflect.Type) reflect.Value
+}
